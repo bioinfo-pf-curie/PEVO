@@ -4,6 +4,12 @@
 # date: "24/03/2025"
 # ---
 
+#library prep
+library(tidyverse)
+library(ggplot2)
+library(ComplexHeatmap)
+require(RColorBrewer)
+
 #data prep
 test <- read.csv("pathto/oncoprint_baseline_mat_for_NatCancer.csv")
 test_2 <- read.csv("pathto/oncoprint_pathways_baseline_mat_for_NatCancer.csv")
