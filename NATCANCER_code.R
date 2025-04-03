@@ -13,9 +13,8 @@ require(RColorBrewer)
 #data prep
 test <- read.csv("pathto/oncoprint_baseline_mat_for_NatCancer.csv")
 test_2 <- read.csv("pathto/oncoprint_pathways_baseline_mat_for_NatCancer.csv")
-p_data_ordered <- read.csv("pathto/p_data_ordered.csv") 
+p_data_ordered <- read.csv("pathto/p_data_for_NatCancer.csv") 
 
-## Figure 4
 #colors
 col_anno <- c("Anus" = "lemonchiffon1", 
               "Cervix" = "lightblue1",
@@ -49,9 +48,7 @@ col_anno <- c("Anus" = "lemonchiffon1",
               "Tobacco" = "tomato",
               "UV" = "royalblue1")
 
-col_anno_2 <- c("No" = "red",
-              "Yes" = "blue")
-
+## Figure 4
 #sample split
 mat_for_onco_baseline_ORR_res <- test[,colnames(test) %in% (subset(p_data_ordered, `CR_PR` == "Yes", select = sample_id_clinsight) %>% pull())]
 mat_for_onco_baseline_ORR_nonres <- test[,colnames(test) %in% (subset(p_data_ordered, `CR_PR` == "No", select = sample_id_clinsight) %>% pull())]
@@ -62,16 +59,12 @@ p_data_ordered_ORR_nonres <- p_data_ordered[p_data_ordered$sample_id_clinsight %
 
 #column order
 onco.id <- match(p_data_ordered_ORR_res$sample_id_clinsight, colnames(mat_for_onco_baseline_ORR_res))
-onco.id
 onco_colnames_ORR_res <- colnames(mat_for_onco_baseline_ORR_res)[onco.id]
 mat_for_onco_baseline_ORR_res_test <- mat_for_onco_baseline_ORR_res[onco.id]
-onco_colnames_ORR_res
 
 onco.id <- match(p_data_ordered_ORR_nonres$sample_id_clinsight, colnames(mat_for_onco_baseline_ORR_nonres))
-onco.id
 onco_colnames_ORR_nonres <- colnames(mat_for_onco_baseline_ORR_nonres)[onco.id]
 mat_for_onco_baseline_ORR_nonres_test <- mat_for_onco_baseline_ORR_nonres[onco.id]
-onco_colnames_ORR_nonres
 
 #annotations
 p_data_test_anno_ORR_res <- HeatmapAnnotation(`Primary cancer site` = p_data_ordered_ORR_res$primary_cancer_site,
@@ -136,32 +129,27 @@ oncoprint <- oncoPrint(mat_for_onco_baseline_ORR_nonres_test,
 
 draw(oncoprint)
 
+#########################################################################################################################
+
 ## Figure 5
+#sample split
 mat_for_onco_baseline_pathways_ORR_res <- mat_for_onco_baseline_pathways[,colnames(mat_for_onco_baseline_pathways) %in% (subset(p_data_ordered, `CR_PR` == "Yes", select = sample_id_clinsight) %>% pull())]
 mat_for_onco_baseline_pathways_ORR_nonres <- mat_for_onco_baseline_pathways[,colnames(mat_for_onco_baseline_pathways) %in% (subset(p_data_ordered, `CR_PR` == "No", select = sample_id_clinsight) %>% pull())]
 
+#preparation for annotations
 p_data_ordered_ORR_res <- p_data_ordered[p_data_ordered$sample_id_clinsight %in% (subset(p_data_ordered, `CR_PR` == "Yes", select = sample_id_clinsight) %>% pull()),]
 p_data_ordered_ORR_nonres <- p_data_ordered[p_data_ordered$sample_id_clinsight %in% (subset(p_data_ordered, `CR_PR` == "No", select = sample_id_clinsight) %>% pull()),]
 
-#for filtration
-#to arrange columns by patient ID
-colnames(mat_for_onco_baseline_pathways)
-rownames(p_data_ordered)
-
-p_data_ordered$`ORR_simplified`
-
+#column order
 onco.id <- match(p_data_ordered_ORR_res$sample_id_clinsight, colnames(mat_for_onco_baseline_pathways_ORR_res))
-onco.id
 onco_colnames_ORR_res <- colnames(mat_for_onco_baseline_pathways_ORR_res)[onco.id]
 mat_for_onco_baseline_pathways_ORR_res_test <- mat_for_onco_baseline_pathways_ORR_res[onco.id]
-onco_colnames_ORR_res
 
 onco.id <- match(p_data_ordered_ORR_nonres$sample_id_clinsight, colnames(mat_for_onco_baseline_pathways_ORR_nonres))
-onco.id
 onco_colnames_ORR_nonres <- colnames(mat_for_onco_baseline_pathways_ORR_nonres)[onco.id]
 mat_for_onco_baseline_pathways_ORR_nonres_test <- mat_for_onco_baseline_pathways_ORR_nonres[onco.id]
-onco_colnames_ORR_nonres
 
+#annotations
 p_data_test_anno <- HeatmapAnnotation(`Primary cancer site` = p_data_ordered_ORR$primary_cancer_site,
                                       TMB = p_data_ordered_ORR$`TMB (high and low)`,
                                       MSI = p_data_ordered_ORR$`MSI/MSS`,
@@ -215,7 +203,7 @@ p_data_test_anno_ORR_nonres <- HeatmapAnnotation(`Primary cancer site` = p_data_
                                                             `CR/PR` = col_anno,
                                                             `Major mutational signature` = col_anno))
 
-
+#oncoprint for Figure 5
 oncoprint_pathway <- oncoPrint(mat_for_onco_baseline_pathways_ORR_nonres_test,
                                alter_fun = alter_fun, 
                                col = col.oncoprint,
